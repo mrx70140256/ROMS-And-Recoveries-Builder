@@ -1,36 +1,67 @@
-# This is a basic workflow to help you get started with Actions
+task:
+  name: "Setting Up, Syncing, Building and Uploading..."
+  timeout_in: 240m  
+  container:
+      image: ubuntu:20.04
+      cpu: 8
+      memory: 32G
+        
+  Build-Env-Setup_script:
+       - export DEBIAN_FRONTEND=noninteractive
+       - apt update
+       - apt install sudo
+       - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+       - ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+       - apt-get install -y tzdata
+       - dpkg-reconfigure --frontend noninteractive tzdata
+       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang -y
+       - sudo apt install python3 -y
+       - sudo ln -sf /usr/bin/python3 /usr/bin/python
+       - git config --global user.name "mrx7014"
+       - git config --global user.email "safen894@gmail.com"
+       - git clone https://github.com/akhilnarang/scripts.git ~/scripts
+       - cd ~/scripts
+       - sudo bash setup/android_build_env.sh
+       - cd ~
+  
+  Storage-Checker_script:
+      - df -h
+      - lsblk
+      - ls -l -a -h
+  
+  Sync_script:
+      - echo "============================"
+      - echo "Syncing The Sources...."
+      - echo "============================"
+      - mkdir twrp
+      - cd twrp
+      - repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-9.0
+      - repo sync
+      - echo "============================"
+      - echo "Syncing Complete!"
+      - echo "============================"
 
-name: CI
-
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+  Build_script:
+      - echo "============================"
+      - echo "Starting the Build..."
+      - echo "============================"
+      - cd twrp
+      - git clone https://github.com/mrx7014/TWRP_Samsung_a3y17lte--gtaxllte-
+      - . build/envsetup.sh
+      - lunch omni_gtaxllte-eng && mka recoveryimage
+  Upload_script:
+      - echo "============================"
+      - echo "Uploading the Build..."
+      - echo "============================"
+      - cd out/target/product/"$DEVICE"
+      - ls -lh
+      - pwd
+      - chmod 777 *
+      - curl --upload-file $(echo $OUTPUT) https://transfer.sh | tee link.txt && echo " "
+      - echo " "
+      - echo "============================"
+      - echo "Build Uploaded!"
+      - echo "Please see the link Below-  "
+      - echo "----------------------------"
+      - cat link.txt && echo " "
+      - echo "============================"
