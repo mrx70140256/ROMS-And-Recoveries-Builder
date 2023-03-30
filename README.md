@@ -10,10 +10,11 @@ That's repo for building ROMs or Recoveries with free CI [Cirrus CI] Server or w
 
 ### - Fork And Build With Actions!
 1. Fork [this Repo]
-2. Edit ```build.yml``` (Only) According to your Needs.
+2. Edit ```.github/workflows/build.yml``` (Only) According to your Needs.
 3. Then go to actions and start workflow.
 
 ## Contact US 
 
 - Linktree: https://linktr.ee/mrx7014
+- Portfolio: mrx7014.github.io
  
