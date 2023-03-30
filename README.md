@@ -16,5 +16,5 @@ That's repo for building ROMs or Recoveries with free CI [Cirrus CI] Server or w
 ## Contact US 
 
 - Linktree: https://linktr.ee/mrx7014
-- Portfolio: mrx7014.github.io
+- Portfolio: https://mrx7014.github.io
  
