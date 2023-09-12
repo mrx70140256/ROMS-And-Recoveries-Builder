@@ -44,7 +44,7 @@ task:
 
   Build_script:
       - echo "============================"
-      - echo "Starting the Build..."
+      - echo "Starting the Build...."
       - echo "============================"
       - cd ~/fox_12.1
       - git clone https://github.com/mrx7014/android_device_samsung_a23 device/samsung/a23
