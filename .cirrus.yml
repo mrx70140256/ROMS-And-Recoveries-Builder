@@ -33,11 +33,11 @@ task:
       - echo "============================"
       - echo "Syncing The Sources...."
       - echo "============================"
-      - mkdir ~/OrangeFox_sync
-      - cd ~/OrangeFox_sync
-      - git clone https://gitlab.com/OrangeFox/sync.git
-      - cd ~/OrangeFox_sync/sync/
-      - ./orangefox_sync.sh --branch 12.1 --path ~/fox_12.1
+      - mkdir crdroid-12.1
+      - cd crdroid-12.1
+      - repo init -u https://github.com/crdroidandroid/android.git -b 12.1 --git-lfs
+      - git clone https://github.com/mrx7014/gtaxl-manifests.git -b crdroid-12.1 .repo/local_manifests
+      - repo sync --force-sync --current-branch --no-tags --no-clone-bundle --optimized-fetch --prune -j$(nproc --all)
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
@@ -46,13 +46,12 @@ task:
       - echo "============================"
       - echo "Starting the Build...."
       - echo "============================"
-      - cd ~/fox_12.1
-      - git clone https://github.com/mrx7014/android_device_samsung_a23 device/samsung/a23
+      - cd crdroid-12.1
       - source build/envsetup.sh
       - export ALLOW_MISSING_DEPENDENCIES=true
       - export FOX_BUILD_DEVICE=<device>
       - export LC_ALL="C"
-      - lunch omni_a23-eng && mka recoveryimage
+      - lunch lineage_gtaxllte-userdebug ; brunch gtaxllte
   Upload_script:
       - echo "============================"
       - echo "Uploading the Build..."
